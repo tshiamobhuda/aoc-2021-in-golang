@@ -23,10 +23,10 @@ func main() {
 		fmt.Println("Please specify a valid part of the puzzle. Use either 1 or 2")
 	}
 
-	puzzleInput := getPuzzle(*dy, true)
+	puzzleInput, err := getPuzzle(*dy, *testOnly)
 
-	if puzzleInput.err != nil {
-		println(puzzleInput.err)
+	if err != nil {
+		fmt.Printf("Could not find PuzzleInput for day %d part %d | Error:\n%v\n", *dy, *part, err.Error())
 		os.Exit(2)
 	}
 
@@ -37,41 +37,15 @@ func main() {
 	fmt.Printf("\nAdvent Of Code - Day: [%d] part [%d] \n\r", *dy, *part)
 
 	if *part == 1 {
-		fmt.Printf("Part %d: %v", *part, solution.Part1(puzzleInput.data))
+		fmt.Printf("Part %d: %v\n", *part, solution.Part1(puzzleInput))
 	}
 
 	if *part == 2 {
-		fmt.Printf("Part %d: %v", *part, solution.Part2(puzzleInput.data))
+		fmt.Printf("Part %d: %v\n", *part, solution.Part2(puzzleInput))
 	}
-
-	if *testOnly {
-		// exit
-		os.Exit(0)
-	}
-
-	// TODO Refactor logic so user can specify test/both
-	//end test puzzle input
-
-	// if puzzleInput.err != nil {
-	// 	println(puzzleInput.err)
-	// 	os.Exit(2)
-	// }
-
-	// puzzleInput = getPuzzle(*dy, false)
-
-	// d, _ = getDay(*dy)
-	// d.puzzleInput = puzzleInput.data
-	// ans1 = d.part1()
-	// ans2 = d.part2()
-	//run solution for day {day} part {part} using puzzle input
 }
 
-type input struct {
-	data string
-	err  error
-}
-
-func getPuzzle(dy uint, test bool) input {
+func getPuzzle(dy uint, test bool) (string, error) {
 	var name string
 
 	if test {
@@ -83,13 +57,8 @@ func getPuzzle(dy uint, test bool) input {
 	data, err := os.ReadFile("./puzzle/" + name)
 
 	if err != nil {
-		return input{
-			err: err,
-		}
+		return "", err
 	}
 
-	return input{
-		data: string(data),
-		err:  nil,
-	}
+	return string(data), nil
 }
