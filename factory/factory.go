@@ -26,8 +26,8 @@ func (a AocFactory) GetAocDay(d uint) (AocDay, error) {
 	// 	return &day.Day2{}, nil
 	// case 3:
 	// 	return &day.Day3{}, nil
-	// case 4:
-	// 	return &day.Day4{}, nil
+	case 4:
+		return &day.Day4{}, nil
 	// case 5:
 	// 	return &day.Day5{}, nil
 	// case 6:
